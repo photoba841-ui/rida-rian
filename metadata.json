@@ -1,0 +1,6 @@
+{
+  "name": "Undangan Pernikahan Rida & Ryan",
+  "description": "Undangan pernikahan elegan untuk Rida dan Ryan dengan fitur RSVP, galeri, buku tamu, dan peta lokasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

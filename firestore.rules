@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    
+    // Guest schema validation
+    function isValidGuest(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100
+          && data.attendance is string && (data.attendance == 'attending' || data.attendance == 'not_attending' || data.attendance == 'maybe')
+          && (!('message' in data) || (data.message is string && data.message.size() <= 500));
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /guests/{guestId} {
+      allow create: if isValidId(guestId) && isValidGuest(incoming());
+      allow list: if true; // Public RSVP guest list
+      allow get: if true;
+    }
+  }
+}

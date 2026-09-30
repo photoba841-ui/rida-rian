@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "Guest": {
+      "title": "Guest",
+      "description": "Information about a wedding guest.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Guest name" },
+        "attendance": { "type": "string", "enum": ["attending", "not_attending", "maybe"], "description": "RSVP status" },
+        "message": { "type": "string", "description": "Guest message or prayer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "attendance"]
+    }
+  },
+  "firestore": {
+    "/guests/{guestId}": {
+      "schema": { "$ref": "Guest" },
+      "description": "Collection of wedding guests and their RSVP info."
+    }
+  }
+}
