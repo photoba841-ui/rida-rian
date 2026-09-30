@@ -434,8 +434,6 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const weddingDate = new Date('2026-11-15T09:00:00');
 
@@ -451,17 +449,8 @@ export default function App() {
       setGuests(guestsData.length > 0 ? guestsData : dummyGuests);
     });
     
-    if (audioRef.current) {
-      audioRef.current.addEventListener('timeupdate', () => setCurrentTime(audioRef.current?.currentTime || 0));
-      audioRef.current.addEventListener('loadedmetadata', () => setDuration(audioRef.current?.duration || 0));
-    }
-    
     return () => {
       unsubscribe();
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('timeupdate', () => setCurrentTime(0));
-        audioRef.current.removeEventListener('loadedmetadata', () => setDuration(0));
-      }
     };
   }, []);
 
@@ -537,9 +526,6 @@ export default function App() {
 
       <audio ref={audioRef} src={musicUrl} loop preload="metadata" />
       <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
-        <div className="bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-rose-200 text-xs text-rose-600">
-          {Math.floor(currentTime / 60)}:{(Math.floor(currentTime % 60)).toString().padStart(2, '0')} / {Math.floor(duration / 60)}:{(Math.floor(duration % 60)).toString().padStart(2, '0')}
-        </div>
         <button 
           onClick={toggleAudio}
           className="p-4 bg-rose-600 text-white rounded-full shadow-lg hover:bg-rose-700 transition-all"
@@ -553,6 +539,11 @@ export default function App() {
       <header className={`relative py-20 text-center ${aestheticFont}`}>
         <FloralDecoration className="top-4 left-4 text-rose-300" />
         <FloralDecoration className="top-4 right-4 rotate-90 text-rose-300" />
+        
+        <div className="flex justify-center gap-4 mb-6">
+          <img src="https://images.pexels.com/photos/1024987/pexels-photo-1024987.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Mempelai" className="w-40 h-40 object-cover rounded-full shadow-lg border-4 border-white" />
+        </div>
+
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
